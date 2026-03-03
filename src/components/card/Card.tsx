@@ -1,6 +1,3 @@
-import { useState } from "react";
-import "./card.css";
-
 interface CardProps {
   price: number;
   title: string;
@@ -9,8 +6,20 @@ interface CardProps {
 
 export function Card({ price, title, image }: CardProps) {
   return (
-    <div className="Card">
-      <img src={image} alt={title} />
+    <div
+      className="
+    flex flex-col items-center justify-center
+    w-[250px]
+    rounded-lg shadow-md p-0"
+    >
+      <img
+        src={image}
+        alt={title}
+        className="
+      w-[250px] h-[200px]
+      rounded-t-lg
+      object-cover"
+      />
       <h2>{title}</h2>
       <p>
         <b>Valor: R$ {price.toFixed(2)}</b>
