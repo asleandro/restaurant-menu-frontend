@@ -1,30 +1,23 @@
-import axios, { type AxiosPromise } from "axios";
+import axios from "axios";
 import type { MenuItemData } from "../../../interface/MenuItemData";
 import { useQuery } from "@tanstack/react-query";
 
 const API_URL = "http://localhost:8080";
 
-const fetchMenuItemData = async (): AxiosPromise<MenuItemData[]> => {
-  const response = axios.get(`${API_URL}/menuItem`);
-  return response;
+const fetchMenuItemData = async (): Promise<MenuItemData[]> => {
+  const response = await axios.get<MenuItemData[]>(`${API_URL}/menuItem`);
+  return response.data;
 };
 
 export function useMenuItemData() {
-  try {
-    const query = useQuery({
-      queryKey: ["menuItemData"],
-      queryFn: fetchMenuItemData,
-      retry: 2,
-    });
-    return {
-      data: query.data?.data,
-      isLoading: query.isLoading,
-      error: query.error,
-    };
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(`Erro ao carregar menu: ${error.message}`);
-    }
-    throw error;
-  }
+  const query = useQuery<MenuItemData[]>({
+    queryKey: ["menuItemData"],
+    queryFn: fetchMenuItemData,
+    retry: 2,
+  });
+  return {
+    data: query.data ?? [],
+    isLoading: query.isLoading,
+    error: query.error,
+  };
 }
