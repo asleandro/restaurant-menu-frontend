@@ -9,15 +9,24 @@ const fetchMenuItemData = async (): Promise<MenuItemData[]> => {
   return response.data;
 };
 
+export interface UseMenuItemDataReturn {
+  data: MenuItemData[] | undefined;
+  isLoading: boolean;
+  error: Error | null;
+}
+
 export function useMenuItemData() {
-  const query = useQuery<MenuItemData[]>({
+  const { data, isLoading, error } = useQuery<MenuItemData[]>({
     queryKey: ["menuItemData"],
     queryFn: fetchMenuItemData,
     retry: 2,
   });
+
   return {
-    data: query.data ?? [],
-    isLoading: query.isLoading,
-    error: query.error,
+    data,
+    isLoading,
+    error,
   };
 }
+
+export type UseMenuItemData = ReturnType<typeof useMenuItemData>;
